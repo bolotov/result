@@ -1,6 +1,7 @@
 # Result (early alpha-version)
 
-This is a Result implementation in Python
+This is a Result implementation in Python.
+It will be made in such a way that it would be possible to drop it into a project.
 
 Result is either "positive" which is Ok or "negative" which is Err.
 
