@@ -6,6 +6,14 @@ E = TypeVar("E")
 U = TypeVar("U")
 F = TypeVar("F")
 
+# MARK: Decorators for denotation
+def pure(func): return func  # document intent only
+def total(func): return func
+def partial(reason): return lambda func: func
+def unsafe(reason): return lambda func: func
+def composable(func): return func
+
+
 class Result(ABC, Generic[T, E]):
     @abstractmethod
     def is_ok(self) -> bool: ...
