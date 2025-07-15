@@ -1,9 +1,11 @@
-from result import Ok, Err, T, E, Result
+from result import Ok, Err, T, E, Result, U, F
 from typing import Callable, TypeVar, Union
 
 class UnsafeMethodCallError(Exception): ...
 
 class UnsafeMixin:
+    """Mixin providing unsafe methods that can raise exceptions"""
+
     def unwrap(self) -> T:
         if self.is_ok():
             return self._value  # Use protected/internal access
@@ -15,10 +17,12 @@ class UnsafeMixin:
         raise UnsafeMethodCallError("Called unwrap_err on Ok")
 
 class UnsafeOk(UnsafeMixin, Ok[T, E]):
-    pass
+    """Ok variant with unsafe methods available"""
+    ...
 
 class UnsafeErr(UnsafeMixin, Err[T, E]):
-    pass
+    """Err variant with unsafe methods available"""
+    ...
 
 def unsafe_ok(value: T) -> UnsafeOk[T, E]:
     return UnsafeOk(value)
@@ -27,4 +31,3 @@ def unsafe_err(error: E) -> UnsafeErr[T, E]:
     return UnsafeErr(error)
 
 UnsafeResult = Union[UnsafeOk[T, E], UnsafeErr[T, E]]
-
