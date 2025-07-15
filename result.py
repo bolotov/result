@@ -21,6 +21,16 @@ class Result(ABC, Generic[T, E]):
     def unwrap_or_else(self, f: Callable[[E], T]) -> T:
         pass
 
+    def __bool__(self) -> bool:
+        return self.is_ok()
+    
+    def __repr__(self) -> str:
+        if self.is_ok():
+            return f"Ok({self.unwrap_or(None)})"
+        else:
+            return f"Err({self.unwrap_err()})"
+
+
 class Ok(Result[T, E]):
     def __init__(self, value: T):
         self._value = value
