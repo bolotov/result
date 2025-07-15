@@ -48,23 +48,6 @@ class Result(ABC, Generic[T, E]):
     def __bool__(self) -> bool:
         return self.is_ok()
 
-    def __repr__(self) -> str:
-        if self.is_ok():
-            return f"Ok({self.unwrap_or(None)})"
-        else:
-            return f"Err({self.unwrap_or_else(lambda e: e)})"
-
-    def __eq__(self, other) -> bool:
-        if not isinstance(other, Result):
-            return False
-
-        if self.is_ok() and other.is_ok():
-            return self.unwrap_or(None) == other.unwrap_or(None)
-        elif self.is_err() and other.is_err():
-            return self.unwrap_or_else(lambda e: e) == other.unwrap_or_else(lambda e: e)
-        else:
-            return False
-
     def __hash__(self) -> int:
         if self.is_ok():
             return hash(("ok", self.unwrap_or(None)))
@@ -93,6 +76,12 @@ class Ok(Result[T, E]):
     def unwrap_or_else(self, f: Callable[[E], T]) -> T:
         return self._value
 
+    def __eq__(self, other):
+        return isinstance(other, Ok) and self._value == other._value
+
+    def __repr__(self): return f"Ok({self._value!r})"
+
+
 class Err(Result[T, E]):
     def __init__(self, error: E):
         self._error = error
@@ -114,3 +103,9 @@ class Err(Result[T, E]):
 
     def unwrap_or_else(self, f: Callable[[E], T]) -> T:
         return f(self._error)
+
+    def __eq__(self, other):
+        return isinstance(other, Err) and self._error == other._error
+
+    def __repr__(self): return f"Err({self._error!r})"
+
