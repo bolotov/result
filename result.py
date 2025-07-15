@@ -21,6 +21,18 @@ class Result(ABC, Generic[T, E]):
     def unwrap_or_else(self, f: Callable[[E], T]) -> T:
         pass
 
+    @abstractmethod
+    def map(self, f: Callable[[T], U]) -> "Result[U, E]": ...
+        
+    @abstractmethod
+    def map_err(self, f: Callable[[E], F]) -> "Result[T, F]": ...
+        
+    @abstractmethod
+    def bind(self, f: Callable[[T], Result[U, E]]) -> "Result[U, E]": ...
+        
+    @abstractmethod
+    def fold(self, on_ok: Callable[[T], U], on_err: Callable[[E], U]) -> U: ...
+  
     def __bool__(self) -> bool:
         return self.is_ok()
     
