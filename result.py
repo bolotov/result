@@ -16,21 +16,33 @@ def composable(func): return func
 
 class Result(ABC, Generic[T, E]):
     @abstractmethod
+    @pure
+    @total
     def is_ok(self) -> bool: ...
 
     @abstractmethod
+    @pure
+    @total
     def is_err(self) -> bool: ...
 
     @abstractmethod
+    @pure
+    @total
     def unwrap_or(self, default: T) -> T: ...
 
     @abstractmethod
+    @pure
+    @total
     def unwrap_or_else(self, f: Callable[[E], T]) -> T: ...
 
     @abstractmethod
+    @pure
+    @total
     def fold(self, on_ok: Callable[[T], U], on_err: Callable[[E], U]) -> U: ...
 
     @abstractmethod
+    @pure
+    @total
     def to_dict(self) -> dict: ...
 
     def __bool__(self) -> bool:
